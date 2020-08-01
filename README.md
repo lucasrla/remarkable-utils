@@ -2,9 +2,9 @@
 # reMarkable command-line utils
 
 - [SSH setup](#SSH-setup)
-- [Install remarkable_entware]()
-- [Install rsync via opkg]()
-- [Use rsync and crontab to run backups automatically]()
+- [Install remarkable_entware](#install-remarkable_entware)
+- [Install rsync via opkg](#install-rsync-via-opkg)
+- [Use rsync and crontab to run backups automatically](#use-rsync-and-crontab-to-run-backups-automatically)
 
 ## SSH setup
 
@@ -121,11 +121,11 @@ Check out what packages are available here: http://bin.entware.net/armv7sf-k3.2/
 First, make sure you have `rsync` installed on your machine and that its protocol version is compatible with the one you have just installed in your reMarkable.
 
 ```sh
-# edit rsync-remarkable.TEMPLATE.sh according to your needs
+# Edit rsync-remarkable.TEMPLATE.sh according to your needs
 
-# save it as rsync-remarkable.sh
+# Save it as rsync-remarkable.sh
 
-# test it out
+# Test it out
 source rsync-remarkable.sh
 ```
 
@@ -134,10 +134,10 @@ Then, add it to your `crontab`:
 ```sh
 crontab -e
 
-# add a new line, like
+# Add a new line, like
 0 9 * * * source /PATH/TO/rsync-remarkable.sh >> /PATH/TO/rsync-remarkable.log 2>&1
 
-# if you need a refresher: https://crontab.guru
+# If you need a refresher: https://crontab.guru
 ```
 
 # Credits and Acknowledgements

@@ -1,0 +1,3 @@
+[submodule "remarkable_entware"]
+	path = remarkable_entware
+	url = https://github.com/Evidlo/remarkable_entware.git

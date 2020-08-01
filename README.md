@@ -50,7 +50,7 @@ Voilà! We're in.
 
 ### Tweak: auto sleep off
 
-Turn off auto sleep to prevent the device from sleeping.
+On your device, navigate to `Menu > Settings > Power` and then turn off auto sleep to prevent the device from sleeping unintentedly.
 
 ## Install remarkable_entware
 

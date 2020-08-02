@@ -6,6 +6,15 @@
 - [Install rsync via opkg](#install-rsync-via-opkg)
 - [Use rsync and crontab to run backups automatically](#use-rsync-and-crontab-to-run-backups-automatically)
 
+## Clone this repo
+
+```sh
+git clone --recursive https://github.com/lucasrla/rm-utils.git
+# --recursive in order to include the remarkable_entware submodule
+
+# if you need a refresher, see: https://www.vogella.com/tutorials/GitSubmodules/article.html
+```
+
 ## SSH setup
 
 1. On your reMarkable device, navigate to `Menu > Settings > About`, then under the `Copyrights and Licenses` tab, scroll down the `General Information` text. Right after the paragraph titled "GPLv3 Compliance", there will be the username (`root`), password and IP address needed for `SSH`.

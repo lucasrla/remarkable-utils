@@ -26,6 +26,10 @@ hostname="remarkable"
 # see: https://remarkablewiki.com/tech/filesystem
 
 # EDIT AND UNCOMMENT
-# rsync -rv -zz --rsync-path=$remarkable_rsync_path --exclude='*.cache' --exclude='*.thumbnails' --exclude='*.highlights' --exclude='*.textconversion' --exclude='*.pagedata' $hostname:$remarkable_data_dir $local_backup_dir
-
-echo "SUCCESS: rsync done! $remarkable_data_dir <-> $local_backup_dir"
+# if rsync -rv -zz --rsync-path=$remarkable_rsync_path --exclude='*.cache' --exclude='*.highlights' --exclude='*.textconversion' --exclude='*.thumbnails' --exclude='*.pagedata' $hostname:$remarkable_data_dir $local_backup_dir ; then
+    timestamp=$(date +"%Y/%m/%d %T")
+    echo "$timestamp SUCCESS: rsync done! $remarkable_data_dir <-> $local_backup_dir"
+else 
+    timestamp=$(date +"%Y/%m/%d %T")
+    echo "$timestamp ERROR: $?"
+fi

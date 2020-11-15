@@ -131,7 +131,9 @@ rsync --version
   General Public Licence for details.
 ```
 
-Check out what packages are available here: http://bin.entware.net/armv7sf-k3.2/Packages.html.
+A list with `opkg` packages that are available lives at [http://bin.entware.net/armv7sf-k3.2/Packages.html](http://bin.entware.net/armv7sf-k3.2/Packages.html).
+
+For a collection of community-maintained, reMarkable-specific `opkg` packages, check out [toltec-dev.org/stable](https://toltec-dev.org/stable/) and [github.com/toltec-dev/toltec](https://github.com/toltec-dev/toltec).
 
 ## Use rsync and crontab to run backups automatically
 

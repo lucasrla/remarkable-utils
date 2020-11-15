@@ -1,15 +1,20 @@
 
 # reMarkable command-line utils
 
-- [SSH setup](#SSH-setup)
-- [Install remarkable_entware](#install-remarkable_entware)
-- [Install rsync via opkg](#install-rsync-via-opkg)
-- [Use rsync and crontab to run backups automatically](#use-rsync-and-crontab-to-run-backups-automatically)
+- [reMarkable command-line utils](#remarkable-command-line-utils)
+  - [Clone this repo](#clone-this-repo)
+  - [SSH setup](#ssh-setup)
+    - [Tweak: auto sleep off](#tweak-auto-sleep-off)
+  - [Install remarkable_entware](#install-remarkable_entware)
+  - [Install rsync via opkg](#install-rsync-via-opkg)
+  - [Use rsync and crontab to run backups automatically](#use-rsync-and-crontab-to-run-backups-automatically)
+- [Credits and Acknowledgements](#credits-and-acknowledgements)
+- [Disclaimers](#disclaimers)
 
 ## Clone this repo
 
 ```sh
-git clone --recursive https://github.com/lucasrla/rm-utils.git
+git clone --recursive https://github.com/lucasrla/remarkable-utils.git
 # --recursive in order to include the remarkable_entware submodule
 
 # if you need a refresher, see: https://www.vogella.com/tutorials/GitSubmodules/article.html

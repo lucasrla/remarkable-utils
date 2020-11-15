@@ -8,6 +8,7 @@
   - [Install remarkable_entware](#install-remarkable_entware)
   - [Install rsync via opkg](#install-rsync-via-opkg)
   - [Use rsync and crontab to run backups automatically](#use-rsync-and-crontab-to-run-backups-automatically)
+  - [Re-enable remarkable_entware after a reMarkable software update](#re-enable-remarkable_entware-after-a-remarkable-software-update)
 - [Credits and Acknowledgements](#credits-and-acknowledgements)
 - [Disclaimers](#disclaimers)
 
@@ -22,13 +23,13 @@ git clone --recursive https://github.com/lucasrla/remarkable-utils.git
 
 ## SSH setup
 
-1. On your reMarkable device, navigate to `Menu > Settings > About`, then under the `Copyrights and Licenses` tab, scroll down the `General Information` text. Right after the paragraph titled "GPLv3 Compliance", there will be the username (`root`), password and IP address needed for `SSH`.
+1. On your reMarkable tablet, go to `Menu > Settings > Help > About`, then tap on `Copyrights and licenses`. In `General information`, right after the section titled "GPLv3 Compliance", there will be the username (`root`), password and IP addresses needed for `SSH`.
 
 2. Add the following lines to your `~/.ssh/config`
 
 ```
 Host remarkable
-  Hostname <IP_ADDRESS_YOU_FOUND_OUT>
+  Hostname <IP_ADDRESS_YOU_HAVE_JUST_FOUND>
   User root
   ForwardX11 no
   ForwardAgent no    
@@ -44,7 +45,7 @@ Host remarkable
 /usr/bin/ssh-copy-id: INFO: Source of key(s) to be installed: "/Users/<USER>/.ssh/id_rsa.pub"
 /usr/bin/ssh-copy-id: INFO: attempting to log in with the new key(s), to filter out any that are already installed
 /usr/bin/ssh-copy-id: INFO: 1 key(s) remain to be installed -- if you are prompted now it is to install the new keys
-root@192.168.7.77's password:
+root@192.168.XXX.XXX's password:
 
 Number of key(s) added:        1.
 ```
@@ -60,11 +61,13 @@ ssh remarkable
   reMarkable: ~/
 ```
 
-Voilà! We're in.
+Voilà! We're in. 
+
+(Type `exit` to get out.)
 
 ### Tweak: auto sleep off
 
-On your device, navigate to `Menu > Settings > Power` and then turn off auto sleep to prevent the device from sleeping unintentedly.
+On your device, navigate to `Menu > Settings > Battery` and then turn `Auto sleep` off to prevent the device from sleeping unintentedly.
 
 ## Install remarkable_entware
 
@@ -152,6 +155,35 @@ crontab -e
 0 9 * * * source /PATH/TO/rsync-remarkable.sh >> /PATH/TO/rsync-remarkable.log 2>&1
 
 # If you need a refresher: https://crontab.guru
+```
+
+## Re-enable remarkable_entware after a reMarkable software update
+
+```sh
+cd remarkable_entware
+
+scp entware_reenable.sh remarkable:
+
+ssh remarkable
+
+./entware_reenable.sh
+  Created symlink /etc/systemd/system/local-fs.target.wants/opt.mount → /etc/systemd/system/opt.mount.
+
+  Info: Entware has been re-enabled.
+
+# double check if rsync is still there
+rsync --version
+  rsync  version 3.1.3  protocol version 31
+  Copyright (C) 1996-2018 by Andrew Tridgell, Wayne Davison, and others.
+  Web site: http://rsync.samba.org/
+  Capabilities:
+      64-bit files, 64-bit inums, 32-bit timestamps, 64-bit long ints,
+      no socketpairs, hardlinks, symlinks, IPv6, batchfiles, inplace,
+      append, ACLs, xattrs, iconv, symtimes, prealloc
+
+  rsync comes with ABSOLUTELY NO WARRANTY.  This is free software, and you
+  are welcome to redistribute it under certain conditions.  See the GNU
+  General Public Licence for details.
 ```
 
 # Credits and Acknowledgements

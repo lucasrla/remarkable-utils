@@ -171,7 +171,7 @@ ssh remarkable
 
   Info: Entware has been re-enabled.
 
-# double check if rsync is still there
+# Double check if rsync is still there
 rsync --version
   rsync  version 3.1.3  protocol version 31
   Copyright (C) 1996-2018 by Andrew Tridgell, Wayne Davison, and others.

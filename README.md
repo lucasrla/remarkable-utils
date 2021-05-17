@@ -23,7 +23,7 @@ git clone --recursive https://github.com/lucasrla/remarkable-utils.git
 
 ## SSH setup
 
-1. Connect your reMarkable table to your computer via a USB-C cable
+1. Make sure your reMarkable tablet is connected to the Wi-Fi
 
 2. On your reMarkable tablet, go to `Menu > Settings > Help > About`, then tap on `Copyrights and licenses`. In `General information`, right after the section titled "GPLv3 Compliance", there will be the username (`root`), password and IP addresses needed for `SSH`.
 

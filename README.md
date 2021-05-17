@@ -23,9 +23,11 @@ git clone --recursive https://github.com/lucasrla/remarkable-utils.git
 
 ## SSH setup
 
-1. On your reMarkable tablet, go to `Menu > Settings > Help > About`, then tap on `Copyrights and licenses`. In `General information`, right after the section titled "GPLv3 Compliance", there will be the username (`root`), password and IP addresses needed for `SSH`.
+1. Make sure your reMarkable tablet is connected to the Wi-Fi
 
-2. Add the following lines to your `~/.ssh/config`
+2. On your reMarkable tablet, go to `Menu > Settings > Help > About`, then tap on `Copyrights and licenses`. In `General information`, right after the section titled "GPLv3 Compliance", there will be the username (`root`), password and IP addresses needed for `SSH`.
+
+3. Add the following lines to your `~/.ssh/config`
 
 ```
 Host remarkable
@@ -35,11 +37,11 @@ Host remarkable
   ForwardAgent no    
 ```
 
-3. Have a public key ready at `~/.ssh/`
+4. Have a public key ready at `~/.ssh/`
 
-4. Run `ssh-copy-id remarkable`
+5. Run `ssh-copy-id remarkable`
 
-5. Type your device password. You should see an output similar to:
+6. Type your device password. You should see an output similar to:
 
 ```
 /usr/bin/ssh-copy-id: INFO: Source of key(s) to be installed: "/Users/<USER>/.ssh/id_rsa.pub"
@@ -50,7 +52,7 @@ root@192.168.XXX.XXX's password:
 Number of key(s) added:        1.
 ```
 
-6. Let's test it out. Type `ssh remarkable`:
+7. Let's test it out. Type `ssh remarkable`:
 
 ```sh
 ssh remarkable

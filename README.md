@@ -23,16 +23,21 @@ git clone --recursive https://github.com/lucasrla/remarkable-utils.git
 
 ## SSH setup
 
-1. On your reMarkable tablet, go to `Menu > Settings > Help > About`, then tap on `Copyrights and licenses`. In `General information`, right after the section titled "GPLv3 Compliance", there will be the username (`root`), password and IP addresses needed for `SSH`.
+1. On your reMarkable tablet, go to `Menu > Settings > Help`, then under `About` tap on `Copyrights and licenses`. In `General information`, right after the section titled "GPLv3 Compliance", there will be the username (`root`), password and IP addresses needed for `SSH`.
 
 2. Add the following lines to your `~/.ssh/config`
 
-```
+```conf
 Host remarkable
-  Hostname <IP_ADDRESS_YOU_HAVE_JUST_FOUND>
+  Hostname IP_ADDRESS_YOU_HAVE_JUST_FOUND
   User root
   ForwardX11 no
-  ForwardAgent no    
+  ForwardAgent no
+  # reMarkable's SSH is an old version of Dropbear (v2019.78), which seems to use an algorithm considered weak nowadays (Oct 2022)
+  # https://matt.ucc.asn.au/dropbear/dropbear.html
+  PubkeyAcceptedAlgorithms +ssh-rsa
+  HostkeyAlgorithms +ssh-rsa  
+  # h/t: https://stackoverflow.com/questions/69875520/unable-to-negotiate-with-40-74-28-9-port-22-no-matching-host-key-type-found-th
 ```
 
 3. Have a public key ready at `~/.ssh/`
@@ -41,14 +46,24 @@ Host remarkable
 
 5. Type your device password. You should see an output similar to:
 
-```
-/usr/bin/ssh-copy-id: INFO: Source of key(s) to be installed: "/Users/<USER>/.ssh/id_rsa.pub"
+```sh
+/usr/bin/ssh-copy-id: INFO: Source of key(s) to be installed: "/Users/$USER/.ssh/id_rsa.pub"
+...
+This key is not known by any other names.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? y
+Please type 'yes', 'no' or the fingerprint: yes
+...
 /usr/bin/ssh-copy-id: INFO: attempting to log in with the new key(s), to filter out any that are already installed
 /usr/bin/ssh-copy-id: INFO: 1 key(s) remain to be installed -- if you are prompted now it is to install the new keys
-root@192.168.XXX.XXX's password:
+root@192.168.XXX.XXX\'s password:
 
 Number of key(s) added:        1.
+
+Now try logging into the machine, with:   "ssh 'remarkable'"
+and check to make sure that only the key(s) you wanted were added.
 ```
+
+Note: For some reason, `ssh-copy-id` is not working with my reMarkable 2 (`2.15.0.1067`). I had to add my public key to `/home/root/.ssh/authorized_keys` manually.
 
 6. Let's test it out. Type `ssh remarkable`:
 
@@ -67,21 +82,20 @@ Voilà! We're in.
 
 ### Tweak: auto sleep off
 
-On your device, navigate to `Menu > Settings > Battery` and then turn `Auto sleep` off to prevent the device from sleeping unintentedly.
+On your device, navigate to `Menu > Settings > Battery` and then turn `Auto sleep` off to prevent the device from sleeping unintentedly while we're SSH'ing into it.
 
 ## Install remarkable_entware
 
 Use the awesome [reMarkable Entware](https://github.com/Evidlo/remarkable_entware) scripts to install `rsync` and other utilities to your reMarkable device:
 
 ```sh
-cd remarkable_entware
-
-scp entware_install.sh remarkable:
+# On your computer's shell
+scp remarkable_entware/install.sh remarkable:
 
 ssh remarkable
 
-./entware_install.sh
-  [...]
+./install.sh
+  ...
   Configuring entware-upgrade.
   Upgrade operations are not required.
   Configuring opkg.
@@ -93,29 +107,34 @@ ssh remarkable
   Configuring entware-opt.
 
   Info: Congratulations! Entware has been installed.
-  [...]
+  ...
 
 # Add /opt/bin & /opt/sbin to PATH
 echo PATH=$PATH:/opt/bin:/opt/sbin >> ~/.bashrc
 
 # Check
 cat ~/.bashrc
-  [...]
+  ...
   PATH=/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin:/opt/bin:/opt/sbin
 
 # Double check
 source ~/.bashrc
 echo $PATH
   /usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin:/opt/bin:/opt/sbin
+
+# Feel free to exit now
+exit
 ```
 
 ## Install rsync via opkg
 
 ```sh
+# On your computer
 ssh remarkable
 
+# Inside your reMarkable
 opkg install rsync
-  [...]
+  ...
 
 rsync --version
   rsync  version 3.1.3  protocol version 31
@@ -131,26 +150,30 @@ rsync --version
   General Public Licence for details.
 ```
 
-A list with `opkg` packages that are available lives at [http://bin.entware.net/armv7sf-k3.2/Packages.html](http://bin.entware.net/armv7sf-k3.2/Packages.html).
+Here are the packages that are available via `opkg`: [http://bin.entware.net/armv7sf-k3.2/Packages.html](http://bin.entware.net/armv7sf-k3.2/Packages.html).
 
 For a collection of community-maintained, reMarkable-specific `opkg` packages, check out [toltec-dev.org/stable](https://toltec-dev.org/stable/) and [github.com/toltec-dev/toltec](https://github.com/toltec-dev/toltec).
 
-## Use rsync and crontab to run backups automatically
+## Use rsync and crontab to run backups automatically (from reMarkable device to computer)
 
-First, make sure you have `rsync` installed on your machine and that its protocol version is compatible with the one you have just installed in your reMarkable.
+First, make sure you have `rsync` installed on your computer and that its protocol version is compatible with the one you have just installed in your reMarkable.
 
 ```sh
+# On your computer
+
 # Edit rsync-remarkable.TEMPLATE.sh according to your needs
 
 # Save it as rsync-remarkable.sh
 
 # Test it out
+# You might need to `mkdir` and `touch` some dirs and files
 source rsync-remarkable.sh
 ```
 
 Then, add it to your `crontab`:
 
-```sh
+```conf
+# On your computer
 crontab -e
 
 # Add a new line, like
@@ -162,13 +185,12 @@ crontab -e
 ## Re-enable remarkable_entware after a reMarkable software update
 
 ```sh
-cd remarkable_entware
-
-scp entware_reenable.sh remarkable:
+# On your computer
+scp remarkable_entware/reenable.sh remarkable:
 
 ssh remarkable
 
-./entware_reenable.sh
+./reenable.sh
   Created symlink /etc/systemd/system/local-fs.target.wants/opt.mount → /etc/systemd/system/opt.mount.
 
   Info: Entware has been re-enabled.
@@ -194,7 +216,7 @@ rsync --version
 
 - [Evan Widloski](http://evan.widloski.com) who wrote [reMarkable Entware](https://github.com/Evidlo/remarkable_entware)
 
-- [JBB](https://jbbgameich.github.io) who put together [rsync-static](https://github.com/JBBgameich/rsync-static). He/she started the [reddit thread about rsync](https://www.reddit.com/r/RemarkableTablet/comments/atkrs7/rsync_on_remarkable/) that got me going
+- [JBB](https://jbbgameich.github.io) who put together [rsync-static](https://github.com/JBBgameich/rsync-static) and started the [reddit thread about rsync](https://www.reddit.com/r/RemarkableTablet/comments/atkrs7/rsync_on_remarkable/) that got me going
 
 For more reMarkable resources, check out the great [awesome-reMarkable](https://github.com/reHackable/awesome-reMarkable) and [remarkablewiki.com](https://remarkablewiki.com/).
 
